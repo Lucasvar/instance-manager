@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 import time
 
 load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
-jenkinsToken = os.getenv('JENKINS_TOKEN')
-jenkinsUrl = os.getenv('JENKINS_URL')
-authName = os.getenv('AUTH_NAME')
-authToken = os.getenv('AUTH_TOKEN')
+token = os.getenv('DISCORD_TOKEN_DEV')
+jenkinsToken = os.getenv('JENKINS_TOKEN_DEV')
+jenkinsUrl = os.getenv('JENKINS_URL_DEV')
+authName = os.getenv('AUTH_NAME_DEV')
+authToken = os.getenv('AUTH_TOKEN_DEV')
 
 projects = ['crm', 'folclass', 'webpj']
 states = ['start', 'stop']
@@ -34,8 +34,8 @@ async def on_message(message):
         if project not in projects or state not in states:
             await message.channel.send(f'Ocurrio un problema, revisa que los argumentos sean correctos')
         else:
-            roleCheck = True if 'CRM' in role_names or 'Folclass' in role_names or 'Web PJ' in role_names else False
-            if ('Devs' in role_names) and roleCheck:
+            roleCheck = True if 'test' in role_names or 'Folclass' in role_names or 'Web PJ' in role_names else False
+            if ('test' in role_names) and roleCheck:
                 response = requests.post(f'{jenkinsUrl}/job/instance-manager/buildWithParameters?token={jenkinsToken}&PROJECT={project}&STATE={state}', auth=(authName, authToken))
                 if response:
                     statusInfo = 'Iniciando' if state == 'start' else 'Parando'
