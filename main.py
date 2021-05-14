@@ -4,6 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 import time
+import boto3
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN_DEV')
@@ -28,6 +29,10 @@ async def on_ready():
 
 @bot.command()
 async def ping(ctx):
+    await ctx.send('pong')
+
+@bot.command()
+async def instance(ctx):
     await ctx.send('pong')
 
 
