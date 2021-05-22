@@ -4,6 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 import time
+import datetime
 import boto3
 from collections import defaultdict
 load_dotenv()
@@ -43,13 +44,14 @@ async def state(ctx, project):
 
 @bot.command(pass_context=True)
 async def instance(ctx, project, state):
+    dateTime = datetime.datetime.now()
     ec2 = session.resource('ec2', region_name=region_name)
-
+    print(f'[author]: {ctx.message.author.name} [message]: instance {project} {state} [datetime]: {dateTime}')
     instances = ec2.instances.filter(
         Filters=[{'Name': 'tag:Project', 'Values': [project.lower()]}])
 
     embed=discord.Embed(title=f'Check the command syntax and try again', color= 0x000000)
-
+    
     for instance in instances:
         if state.lower() == 'start':
             response = ec2.instances.filter(InstanceIds = [instance.id]).start()
@@ -68,40 +70,12 @@ async def instance(ctx, project, state):
             except Exception as error:
                 errorInfo = str(error).split(": ")[1]
                 embed=discord.Embed(title=f'{errorInfo}', color= 0x7A4A5C)
-    
     try:
+        # embed.add_field(name="\u200B", value='[Google](https://google.com)', inline=False)
+        # embed.set_footer(text=f'{str(dateTime).split(".")[0]}', url="https://google.com")
         await ctx.send(embed=embed)
         embed.Empty
     except UnboundLocalError as error:
         print(error)
 
-
-    # print(type(response[0]) is dict)
-    # print(response[0]["StartingInstances"][0]["CurrentState"]["Name"])
-    # print(response[0]["StartingInstances"][0]["PreviousState"]["Name"])
-    
-
-    # response = ec2.describe_instances()
-    # ec2.instances.filter(InstanceIds = ids).stop()
-    # ec2.instance(id)
-    # instances = ec2.instances.filter(
-    #     Filters=[
-    #         {
-    #             'Name': 'tag:Project', 'Values': [project.lower()]
-    #         }
-    #     ])
-    # ec2info = defaultdict()
-    # print(ec2info)
-    # for instance in instances:.
-    #     instanceId = instance.id
-        # print(instanceId)
-        # print(ec2.Instance(instanceId).stop().StoppingInstances[0].CurrentState.Name)
-    #     print(ec2.Instance('i-00b3823e52c436680').start())
-    # instances = ec2.instances.filter(
-    #     Filters=[{'Name': 'tag:Project', 'Values': [project.lower()]}])
-
-    # for instance in instances:
-    #     embed=discord.Embed(title=f' ', color= 0x20a75d if instance.state['Code'] == 16 else 0xc73c47)
-    #     embed.add_field(name=f'{project} state', value=instance.state['Name'], inline=True)
-    #     await ctx.send(embed=embed)
 bot.run(token)
