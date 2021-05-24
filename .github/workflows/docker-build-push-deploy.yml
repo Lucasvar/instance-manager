@@ -43,5 +43,6 @@ jobs:
         script_stop: true
         script: |
           docker pull lucasvar/im-bot:latest
+          docker rm -fv im-bot-dev
           docker run --name im-bot-dev -d lucasvar/im-bot:latest
           docker images prune -f
