@@ -25,6 +25,7 @@ jobs:
         echo REGION_NAME=${{ secrets.APP_REGION_NAME }} >> .env
         echo DISCORD_TOKEN_DEV=${{ secrets.APP_DISCORD_TOKEN_DEV }} >> .env
         cat .env
+        ls -la
     - 
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
