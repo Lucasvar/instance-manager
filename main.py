@@ -8,11 +8,8 @@ import datetime
 import boto3
 from collections import defaultdict
 load_dotenv()
+
 token = os.getenv('DISCORD_TOKEN_DEV')
-jenkinsToken = os.getenv('JENKINS_TOKEN_DEV')
-jenkinsUrl = os.getenv('JENKINS_URL_DEV')
-authName = os.getenv('AUTH_NAME_DEV')
-authToken = os.getenv('AUTH_TOKEN_DEV')
 profile_name = os.getenv('PROFILE_NAME')
 region_name = os.getenv('REGION_NAME')
 
