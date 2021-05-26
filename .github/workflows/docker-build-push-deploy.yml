@@ -20,7 +20,7 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: lucasvar/im-bot
-        tag: latest
+        tags: latest
         registry: registry.lucasvar.tech
         username: ${{ secrets.DOCKER_USERNAME_K8S }}
         password: ${{ secrets.DOCKER_PASSWORD_K8S }}
