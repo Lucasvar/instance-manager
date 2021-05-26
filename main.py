@@ -13,19 +13,13 @@ token = os.getenv('DISCORD_TOKEN_DEV')
 profile_name = os.getenv('PROFILE_NAME')
 region_name = os.getenv('REGION_NAME')
 
-projects = ['crm', 'folclass', 'webpj']
-states = ['start', 'stop']
-rolesProjects = ['CRM', 'Folclass', 'Web PJ']
 client = discord.Client()
+session = boto3.Session()
 bot = commands.Bot(command_prefix='$')
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    # await bot.change_presence(status=discord.Status.idle, activity=game)
-
-session = boto3.Session()
-
 
 @bot.command(pass_context=True)
 async def state(ctx, project):
@@ -68,8 +62,6 @@ async def instance(ctx, project, state):
                 errorInfo = str(error).split(": ")[1]
                 embed=discord.Embed(title=f'{errorInfo}', color= 0x7A4A5C)
     try:
-        # embed.add_field(name="\u200B", value='[Google](https://google.com)', inline=False)
-        # embed.set_footer(text=f'{str(dateTime).split(".")[0]}', url="https://google.com")
         await ctx.send(embed=embed)
         embed.Empty
     except UnboundLocalError as error:
