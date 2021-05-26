@@ -16,35 +16,26 @@ jobs:
     - 
       uses: actions/checkout@v2
       name: Check out code
-    -
-      name: Create .env file
-      run: |
-        ls -la
-        touch .env
-        echo PROFILE_NAME=${{ secrets.APP_PROFILE_NAME }} >> .env
-        echo REGION_NAME=${{ secrets.APP_REGION_NAME }} >> .env
-        echo DISCORD_TOKEN_DEV=${{ secrets.APP_DISCORD_TOKEN_DEV }} >> .env
-        cat .env
-        ls -la
     - 
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: lucasvar/im-bot
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    - 
-      name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        fingerprint: ${{ secrets.SSH_FINGERPRINT }}
-        script_stop: true
-        script: |
-          docker pull lucasvar/im-bot:latest
-          docker rm -fv im-bot-dev
-          docker run --name im-bot-dev -d lucasvar/im-bot:latest
-          docker image prune -f
+        tag: latest
+        registry: registry.lucasvar.tech
+        username: ${{ secrets.DOCKER_USERNAME_K8S }}
+        password: ${{ secrets.DOCKER_PASSWORD_K8S }}
+    # - 
+    #   name: executing remote ssh commands using ssh key
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.SSH_HOST }}
+    #     username: ${{ secrets.SSH_USERNAME }}
+    #     key: ${{ secrets.SSH_KEY }}
+    #     port: ${{ secrets.SSH_PORT }}
+    #     fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+    #     script_stop: true
+    #     script: |
+    #       docker pull lucasvar/im-bot:latest
+    #       docker rm -fv im-bot-dev
+    #       docker run --name im-bot-dev -d lucasvar/im-bot:latest
+    #       docker image prune -f
