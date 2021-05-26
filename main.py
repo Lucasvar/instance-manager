@@ -24,7 +24,7 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
     # await bot.change_presence(status=discord.Status.idle, activity=game)
 
-session = boto3.Session(profile_name=profile_name)
+session = boto3.Session()
 
 
 @bot.command(pass_context=True)

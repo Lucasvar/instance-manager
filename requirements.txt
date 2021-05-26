@@ -2,3 +2,4 @@ discord.py
 awscli
 python-dotenv
 requests
+boto3
