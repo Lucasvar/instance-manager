@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 todo.md
+k8s/
