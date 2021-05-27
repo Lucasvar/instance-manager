@@ -8,6 +8,7 @@ on:
 jobs:
 
   build-and-push:
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
     - 
@@ -23,7 +24,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD_K8S }}
     
   deploy-to-cluster:
-    name: Deploy to cluster
+    name: Deploy to Cluster
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
