@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, main ]
   #pull_request:
   #  branches: [ main ]
 
@@ -20,22 +20,22 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: lucasvar/im-bot
-        tags: v1, latest
+        tags: ${{ github.ref }}-${{ github.sha }} , latest
         registry: registry.lucasvar.tech
         username: ${{ secrets.DOCKER_USERNAME_K8S }}
         password: ${{ secrets.DOCKER_PASSWORD_K8S }}
-    # - 
-    #   name: executing remote ssh commands using ssh key
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.SSH_HOST }}
-    #     username: ${{ secrets.SSH_USERNAME }}
-    #     key: ${{ secrets.SSH_KEY }}
-    #     port: ${{ secrets.SSH_PORT }}
-    #     fingerprint: ${{ secrets.SSH_FINGERPRINT }}
-    #     script_stop: true
-    #     script: |
-    #       docker pull lucasvar/im-bot:latest
-    #       docker rm -fv im-bot-dev
-    #       docker run --name im-bot-dev -d lucasvar/im-bot:latest
-    #       docker image prune -f
+    - 
+      name: Deploy to Kubernetes cluster
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with:
+        args: set image --record deployment/im-bot im-bot=lucasvar/im-bot:${{ github.ref }}-${{ github.sha }}
+    - 
+      name: Verify deployment
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        KUBECTL_VERSION: "1.20"
+      with:
+        args: '"rollout status deployment/im-bot"'
